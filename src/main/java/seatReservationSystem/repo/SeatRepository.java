@@ -24,5 +24,5 @@ public interface SeatRepository extends JpaRepository<Seat, UUID> {
             List<String> seatNumbers
     );
 
-    List<Seat> findByShowId(UUID showId);
+    List<Seat> findByShow_IdOrderBySeatNumberAsc(UUID showId);
 }
