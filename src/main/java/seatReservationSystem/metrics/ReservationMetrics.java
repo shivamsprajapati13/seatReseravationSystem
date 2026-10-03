@@ -12,6 +12,7 @@ public class ReservationMetrics {
     private final Counter userLimit;
     private final Counter idempotentReplay;
     private final Counter idempotencyConflict;
+    private final Counter cancelled;
 
     public ReservationMetrics(MeterRegistry registry) {
         confirmed = Counter.builder("reservations_confirmed_total")
@@ -37,6 +38,10 @@ public class ReservationMetrics {
                 .description("Same idempotency key reused with a different seat set")
                 .tag("reason", "idempotency_conflict")
                 .register(registry);
+
+        cancelled = Counter.builder("reservations_cancelled_total")
+                .description("Seats released via reservation cancel")
+                .register(registry);
     }
 
     public void confirmed(int seatCount) {
@@ -57,5 +62,9 @@ public class ReservationMetrics {
 
     public void idempotencyConflict() {
         idempotencyConflict.increment();
+    }
+
+    public void cancelled(int seatCount) {
+        cancelled.increment(seatCount);
     }
 }

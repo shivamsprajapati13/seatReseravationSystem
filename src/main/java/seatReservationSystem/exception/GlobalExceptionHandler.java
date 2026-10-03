@@ -1,5 +1,6 @@
 package seatReservationSystem.exception;
 
+import org.springframework.dao.CannotAcquireLockException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -83,6 +84,26 @@ public class GlobalExceptionHandler {
                 .body(Map.of(
                         "error", "FORBIDDEN",
                         "message", ex.getMessage()
+                ));
+    }
+
+    @ExceptionHandler(ReservationAlreadyCancelledException.class)
+    ResponseEntity<?> alreadyCancelled() {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(Map.of("error", "ALREADY_CANCELLED"));
+    }
+
+    @ExceptionHandler({
+            CannotAcquireLockException.class,
+            TransientConflictException.class
+    })
+    ResponseEntity<?> transientConflict() {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(Map.of(
+                        "error", "TRANSIENT_CONFLICT",
+                        "message", "Retry request with same idempotency key"
                 ));
     }
 }

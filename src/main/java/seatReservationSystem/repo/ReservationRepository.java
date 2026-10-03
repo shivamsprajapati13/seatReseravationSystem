@@ -1,6 +1,7 @@
 package seatReservationSystem.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import seatReservationSystem.entity.Reservation;
 import seatReservationSystem.entity.ReservationStatus;
 
@@ -20,4 +21,15 @@ public interface ReservationRepository
             String userId,
             ReservationStatus status
     );
+
+    @Query(
+            value = """
+                    SELECT *
+                    FROM reservations
+                    WHERE id = :id
+                    FOR UPDATE
+                    """,
+            nativeQuery = true
+    )
+    Optional<Reservation> findByIdForUpdate(UUID id);
 }
