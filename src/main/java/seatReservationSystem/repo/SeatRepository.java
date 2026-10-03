@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import seatReservationSystem.entity.Seat;
+import seatReservationSystem.entity.SeatStatus;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,4 +26,6 @@ public interface SeatRepository extends JpaRepository<Seat, UUID> {
     );
 
     List<Seat> findByShow_IdOrderBySeatNumberAsc(UUID showId);
+
+    long countByStatus(SeatStatus status);
 }

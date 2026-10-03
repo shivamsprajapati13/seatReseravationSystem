@@ -15,21 +15,26 @@ public class ReservationMetrics {
 
     public ReservationMetrics(MeterRegistry registry) {
         confirmed = Counter.builder("reservations_confirmed_total")
+                .description("Seats successfully confirmed via reserve")
                 .register(registry);
 
         seatTaken = Counter.builder("reservations_declined_total")
+                .description("Reserve attempts declined by domain reason")
                 .tag("reason", "seat_taken")
                 .register(registry);
 
         userLimit = Counter.builder("reservations_declined_total")
+                .description("Reserve attempts declined by domain reason")
                 .tag("reason", "per_user_limit")
                 .register(registry);
 
         idempotentReplay = Counter.builder("reservations_declined_total")
+                .description("Idempotent retries (same key and body; no new reservation)")
                 .tag("reason", "idempotent_replay")
                 .register(registry);
 
         idempotencyConflict = Counter.builder("reservations_declined_total")
+                .description("Same idempotency key reused with a different seat set")
                 .tag("reason", "idempotency_conflict")
                 .register(registry);
     }
